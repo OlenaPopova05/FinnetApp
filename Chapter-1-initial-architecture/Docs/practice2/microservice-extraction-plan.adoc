@@ -1,0 +1,34 @@
+= Microservice Extraction Plan - Contracts Module
+
+The Contracts module has clear boundaries and is responsible only for managing the contract lifecycle.
+Because of this separation, it could be extracted into a separate microservice in the future without major changes to business logic.
+
+== Public API
+
+If extracted, the Contracts service would expose a simple REST API:
+
+* POST /api/contracts
+
+Used to prepare a new contract for a customer.
+
+* PATCH /api/contracts/{id}
+
+Used to sign a prepared contract.
+
+== Data Ownership
+
+The Contracts microservice would have its own database.
+
+It would fully own:
+
+* Contract entity
+* Contract lifecycle data (PreparedAt, SignedAt, ExpiringAt, Duration)
+* Business rules related to contract validation
+
+Other services would only store CustomerId as a reference and would not access the Contracts database directly.
+
+== Communication with Other Services
+
+* Synchronous communication would be performed via REST API.
+* For important business events (ContractSignedEvent), the service could publish events to notify other modules.
+
