@@ -35,6 +35,7 @@ builder.Services.AddScoped<IContractsRepository, ContractsRepository>();
 builder.Services.AddScoped<IValidator<PrepareContractRequest>, PrepareContractRequestValidator>();
 builder.Services.AddScoped<IValidator<SignContractRequest>, SignContractRequestValidator>();
 builder.Services.AddScoped<Contracts.Application.Common.IEventPublisher, EventPublisherAdapter>();
+builder.Services.AddScoped<IContractsService, ContractsService>();
 
 builder.Services.AddOffers(builder.Configuration);
 builder.Services.AddReports(builder.Configuration);

@@ -1,9 +1,7 @@
 namespace Contracts.Presentation.SignContract;
 
 using Contracts.Application;
-using Contracts.Application.Common;
 using Contracts.Application.SignContract;
-using Contracts.Domain.Events;
 using Contracts.Presentation.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,31 +11,18 @@ internal static class SignContractEndpoint
 {
     internal static void MapSignContract(this IEndpointRouteBuilder app) => app.MapPatch(ContractsApiPaths.Sign,
             async (Guid id, SignContractRequest request,
-                IContractsRepository repository,
-                IEventPublisher eventPublisher,
-                TimeProvider timeProvider,
+                IContractsService contractsService,
                 CancellationToken cancellationToken) =>
             {
-                var contract = await repository.GetByIdAsync(id, cancellationToken);
-
-                if (contract is null)
+                try
+                {
+                    await contractsService.SignContractAsync(id, request.SignedAt, cancellationToken);
+                    return Results.NoContent();
+                }
+                catch (InvalidOperationException)
                 {
                     return Results.NotFound();
                 }
-
-                var dateNow = timeProvider.GetUtcNow();
-                contract.Sign(request.SignedAt, dateNow);
-                await repository.SaveChangesAsync(cancellationToken);
-
-                var @event = ContractSignedEvent.Create(
-                    contract.Id,
-                    contract.CustomerId,
-                    contract.SignedAt!.Value,
-                    contract.ExpiringAt!.Value,
-                    timeProvider.GetUtcNow());
-                await eventPublisher.PublishAsync(@event, cancellationToken);
-
-                return Results.NoContent();
             })
         .ValidateRequest<SignContractRequest>()
         .WithSummary("Signs prepared contract")
