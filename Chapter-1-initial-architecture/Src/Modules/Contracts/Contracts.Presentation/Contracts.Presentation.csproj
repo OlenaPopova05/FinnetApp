@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts.Application\Contracts.Application.csproj" />
+    <ProjectReference Include="..\Contracts.Domain\Contracts.Domain.csproj" />
+    <ProjectReference Include="..\Contracts.Infrastructure\Contracts.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+  </ItemGroup>
+
+</Project>
