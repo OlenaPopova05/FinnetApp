@@ -1,0 +1,36 @@
+= Contracts Module - Bounded Context Description
+
+The Contracts module represents a bounded context responsible for managing
+the lifecycle of gym service agreements between customers and the gym.
+It encapsulates all business rules related to contract preparation,
+validation and signing.
+
+== Responsibilities
+
+* Preparing contracts for customers before they can use gym services
+* Validating customer eligibility based on business rules (age, height, previous contract status)
+* Managing the contract signing process
+* Tracking contract lifecycle 
+* Enforcing contract business rules such as:
+** Previous contracts must be signed before preparing new ones
+** Contracts can only be signed within 30 days of preparation
+
+== Not Responsible For
+
+* Managing customer personal information (this belongs to Customers module)
+* Processing payments or billing (this belongs to Payments module)
+* Managing gym passes or access control (this belongs to Passes module)
+* Generating offers or promotions (this belongs to Offers module)
+* Creating reports or analytics (this belongs to Reports module)
+
+== Data Ownership
+
+The Contracts module has Contract entity with the following attributes:
+
+** `Id` - unique contract identifier
+** `CustomerId` - reference to customer
+** `PreparedAt` - when the contract was prepared
+** `Duration` - contract validity period
+** `SignedAt` - when the contract was signed
+** `ExpiringAt` - when the contract expires
+** `Signed` - contract status
